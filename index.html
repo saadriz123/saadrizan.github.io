@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saad Rizan | Cloud Architect & Engineer</title>
+    
+    <!-- Professional Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+
+    <style>
+        /* --- DESIGN SYSTEM & VARIABLES --- */
+        :root {
+            --bg: #050505;
+            --card: #111111;
+            --primary: #22c55e; /* Vibrant Forest Green */
+            --primary-dim: rgba(34, 197, 94, 0.1);
+            --text: #ffffff;
+            --text-dim: #a1a1aa;
+            --border: #27272a;
+            --nav-height: 90px;
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden; /* Scroll is handled by the JS wrapper */
+            height: 100vh;
+        }
+
+        /* --- NAVIGATION --- */
+        header.top-nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: var(--nav-height);
+            padding: 0 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { 
+            font-family: 'Space Grotesk'; 
+            font-weight: 700; 
+            font-size: 1.2rem; 
+            color: var(--primary); 
+            cursor: pointer; 
+            letter-spacing: 1px;
+        }
+
+        nav.menu { display: flex; gap: 2rem; }
+        nav.menu a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        nav.menu a:hover, nav.menu a.active { color: var(--primary); }
+
+        /* --- MAIN PAGE WRAPPER --- */
+        .page-wrapper {
+            height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: calc(var(--nav-height) + 30px) 10% 2rem;
+            position: relative;
+        }
+
+        .content {
+            max-width: 1200px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        section.active .content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .section-title { font-size: 2.1rem; margin-bottom: 1rem; color: #fff; }
+
+        /* --- UI COMPONENTS (BUTTONS) --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .btn-primary { background: var(--primary); color: #000; border: none; }
+        .btn-primary:hover { transform: scale(1.05); }
+        .btn-outline { color: var(--text); background: rgba(255,255,255,0.05); }
+        .btn-full { width: 100%; justify-content: center; padding: 1.2rem; }
+
+        /* --- PROFILE PAGE (HERO) --- */
+        .hero-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .profile-pic {
+            width: 100%; max-width: 380px; aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--primary-dim), transparent);
+            border-radius: 40px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-label { color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.85rem; letter-spacing: 2px; }
+        .hero-text h1 { font-size: 3.5rem; line-height: 1; margin-bottom: 1.5rem; }
+        .hero-text span { color: var(--primary); }
+        .hero-actions { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .hero-text p { color: var(--text-dim); line-height: 1.6; font-size: 1.1rem; }
+
+        /* --- PROJECT CARDS --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+            padding-bottom: 2rem;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .project-card:hover { border-color: var(--primary); transform: translateY(-8px); }
+
+        .img-placeholder {
+            width: 100%; height: 130px; 
+            background: #1a1a1a; position: relative; overflow: hidden;
+        }
+        .img-placeholder img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .project-card:hover img { transform: scale(1.1); }
+
+        .project-card-info { padding: 1rem; } 
+        .project-card h3 { color: var(--primary); margin-bottom: 0.3rem; font-size: 1rem; }
+        .project-card p { font-size: 0.75rem; color: var(--text-dim); }
+
+        /* --- CARDS & EDUCATION/SKILLS --- */
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; }
+
+        .info-card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            padding: 2rem; 
+            border-radius: 24px; 
+            margin-bottom: 1.5rem; 
+        }
+        .date-tag { color: var(--primary); margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 800; }
+        .card-headline { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .card-subtext { color: var(--text-dim); }
+        .skill-category { font-size: 1.2rem; color: var(--primary); margin-bottom: 1rem; }
+
+        /* --- TAGS --- */
+        .tag-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+        .tag { 
+            background: #1a1a1a; padding: 8px 16px; border-radius: 10px; 
+            font-size: 0.85rem; border: 1px solid var(--border); color: var(--text);
+            transition: 0.3s;
+        }
+        .tag:hover { border-color: var(--primary); background: var(--primary-dim); }
+
+        /* --- CONTACT PAGE DESIGN --- */
+        .contact-header { text-align: center; margin-bottom: 1.5rem; }
+        .subtitle { color: var(--text-dim); font-size: 0.85rem; }
+
+        .circular-contact-row {
+            display: flex; justify-content: center; gap: 2rem; width: 100%;
+            margin-bottom: 2.5rem;
+        }
+
+        .circular-btn {
+            width: 70px; height: 70px; border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: var(--text-dim);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: transparent; position: relative;
+        }
+
+        .circular-btn:hover {
+            border-color: var(--primary); color: var(--primary);
+            transform: scale(1.15); box-shadow: 0 0 20px var(--primary-dim);
+        }
+
+        /* --- robust styling for icons and custom images --- */
+        .circular-btn i { width: 26px; height: 26px; }
+        .circular-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            transition: 0.3s;
+        }
+
+        .circular-btn::after {
+            content: attr(data-label); position: absolute; bottom: -30px;
+            font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; opacity: 0; transition: 0.3s; color: var(--text-dim);
+        }
+        .circular-btn:hover::after { opacity: 1; bottom: -22px; color: var(--primary); }
+
+        .contact-mailbox {
+            max-width: 600px; margin: 0 auto; width: 100%;
+            background: var(--card); padding: 1.8rem; border-radius: 24px;
+            border: 1px solid var(--border); position: relative;
+        }
+
+        .contact-mailbox::before {
+            content: "SEND A MESSAGE"; position: absolute; top: -10px; left: 20px;
+            background: var(--bg); padding: 0 8px; font-size: 0.65rem;
+            font-weight: 800; color: var(--primary);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+        .input-group label { display: block; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 800; }
+        .input-group input, .input-group textarea {
+            width: 100%; background: #0a0a0a; border: 1px solid var(--border);
+            padding: 0.8rem; border-radius: 12px; color: white; font-family: inherit;
+        }
+        .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* --- PROJECT DETAIL OVERLAY --- */
+        .project-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 2000; display: none;
+            overflow-y: auto; padding: 5% 10%; opacity: 0; transition: opacity 0.5s ease;
+        }
+        .project-page.active { display: block; opacity: 1; }
+        .back-btn { 
+            position: fixed; top: 2rem; left: 2rem; z-index: 2100;
+            background: var(--card); border: 1px solid var(--border);
+            padding: 0.8rem 1.2rem; border-radius: 12px; color: var(--primary);
+            cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .content-detail { max-width: 1000px; margin: 50px auto 0; padding-bottom: 50px; }
+        .project-detail-img { width: 100%; height: 350px; object-fit: cover; border-radius: 30px; margin-bottom: 2rem; border: 1px solid var(--border); }
+        .project-detail-title { font-size: 2.8rem; margin-bottom: 1rem; color: var(--primary); }
+        .project-detail-desc { font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 2rem; }
+        .project-detail-desc ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.8rem; margin-bottom: 1.5rem; }
+        .project-detail-desc li { margin-bottom: 0.5rem; padding-left: 0.5rem; }
+        .project-detail-desc strong { color: #ffffff; font-weight: 700; }
+
+        /* --- IMPROVED MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+
+    body {
+        overflow: auto; /* allow natural scrolling */
+        overflow-x: hidden;
+    }
+
+    header.top-nav {
+        padding: 0 5%;
+        height: 60px;
+    }
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    /* Bottom mobile nav */
+    nav.menu {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(15px);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        border-top: 1px solid var(--border);
+        z-index: 1000;
+        gap: 0;
+    }
+    
+    nav.menu a {
+        font-size: 0.65rem;
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        margin: 0;
+    }
+
+    section {
+        padding: 80px 5% 80px; /* Adjust for top header and bottom nav */
+        height: auto;
+        min-height: auto;
+        margin-bottom: 2rem;
+    }
+
+    .page-wrapper {
+        transform: none !important;
+    }
+    
+    .content {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* HERO FIX */
+    .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .profile-pic {
+        max-width: 250px;
+        margin: 0 auto;
+    }
+
+    .hero-text h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    /* PROJECTS FIX */
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    /* EDUCATION & SKILLS */
+    .split-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* CONTACT BUTTONS */
+    .circular-contact-row {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .circular-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* FORM */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* PROJECT DETAIL PAGE */
+    .project-page {
+        padding: 20% 5% 5%;
+    }
+    .back-btn {
+        top: 1rem;
+        left: 1rem;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+    }
+    .content-detail {
+        margin-top: 20px;
+    }
+    .content-detail h1 {
+        font-size: 2rem;
+    }
+
+    .content-detail img {
+        height: 200px !important;
+        border-radius: 15px !important;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="top-nav">
+        <div class="logo" onclick="moveTo(0)">SAAD.RIZAN</div>
+        <nav class="menu">
+            <a onclick="moveTo(0)" class="nav-link active">Profile</a>
+            <a onclick="moveTo(1)" class="nav-link">Projects</a>
+            <a onclick="moveTo(2)" class="nav-link">Education</a>
+            <a onclick="moveTo(3)" class="nav-link">Skills</a>
+            <a onclick="moveTo(4)" class="nav-link">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Full-screen Project View Overlay -->
+    <div id="project-page" class="project-page">
+        <div class="back-btn" onclick="closeProjectPage()">
+            <i data-lucide="arrow-left"></i> Back to Portfolio
+        </div>
+        <div id="project-page-content" class="content-detail"></div>
+    </div>
+
+    <!-- Main Scrolling Wrapper -->
+    <main class="page-wrapper" id="wrapper">
+        
+        <!-- SECTION 0: PROFILE -->
+        <section id="s-0" class="active">
+            <div class="content">
+                <div class="hero-layout">
+                    <div class="profile-pic">
+                        <!-- REPLACE the URL below with your own image (e.g., src="my-photo.jpg") -->
+                        <img src="./Profile3.jpeg" alt="Mohamed Saad Rizan">
+                    </div>
+                    <div class="hero-text">
+                        <p class="hero-label">CLOUD SOLUTIONS ENGINEER</p>
+                        <h1>MOHAMED<br><span>SAAD RIZAN</span></h1>
+                        <div class="hero-actions">
+                            <a href="https://www.linkedin.com/in/mohamed-saad-rizan" target="_blank" class="btn btn-primary">
+                                <i data-lucide="linkedin"></i> LinkedIn
+                            </a>
+                            <!-- CHANGE "resume.pdf" to your actual file name -->
+                            <a href="./Mohamed Saad Rizan (5) (1).pdf" download="Saad_Rizan_Resume" class="btn btn-outline">
+                                <i data-lucide="download"></i> Download Resume
+                            </a>
+                        </div>
+                        <p>I am a final year BSc (Hons) Computer Science student at Staffordshire University specializing in bridging the gap between code and infrastructure with a focus on AWS ecosystems and Enterprise Networking architecture. In addition to my technical background, I also have experience in Project Management.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: PROJECTS -->
+        <section id="s-1">
+            <div class="content">
+                <h2 class="section-title">CORE PROJECTS</h2>
+                <div class="projects-grid">
+                    <div class="project-card" onclick="openProject('midwife')">
+                        <div class="img-placeholder"><img src="./rakawaranaya.png"></div>
+                        <div class="project-card-info">
+                            <h3>Midwife System</h3>
+                            <p>Ministry of Health digitalization & reporting.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('smarthealth')">
+                        <div class="img-placeholder"><img src="./smarthealth.png"></div>
+                        <div class="project-card-info">
+                            <h3>SmartHealth Clinics</h3>
+                            <p>AWS Cloud Migration & Security Infrastructure.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('greenfarm')">
+                        <div class="img-placeholder"><img src="./greenfarm.png"></div>
+                        <div class="project-card-info">
+                            <h3>GreenFarm Organics</h3>
+                            <p>Disaster Recovery & Scalability Optimization.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('network')">
+                        <div class="img-placeholder"><img src="./Networkingh.png"></div>
+                        <div class="project-card-info">
+                            <h3>Enterprise Network</h3>
+                            <p>Cisco Packet Tracer / Multi-campus topology.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('migration')">
+                        <div class="img-placeholder"><img src="./Hotel.png"></div>
+                        <div class="project-card-info">
+                            <h3>Hotel Reservation System</h3>
+                            <p>Desktop Application & OOP Implementation.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('serverless')">
+                        <div class="img-placeholder"><img src="./hospital.png"></div>
+                        <div class="project-card-info">
+                            <h3>Hospital & Pharmacy Web</h3>
+                            <p>Healthcare Appointment & Order Management.</p>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="openProject('iam')">
+                        <div class="img-placeholder"><img src="./cinema.png"></div>
+                        <div class="project-card-info">
+                            <h3>Movie Ticket Booking</h3>
+                            <p>Theater & Seat Management System.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: EDUCATION -->
+        <section id="s-2">
+            <div class="content">
+                <h2 class="section-title">EDUCATION</h2>
+                <div class="split-layout">
+                    <div class="info-card">
+                        <p class="date-tag">2024 - Present</p>
+                        <h3 class="card-headline">BSc (Hons) Computer Science</h3>
+                        <p class="card-subtext">Staffordshire University / APIIT Sri Lanka</p>
+                    </div>
+                    <div class="info-card">
+                        <p class="date-tag">2023 - 2024</p>
+                        <h3 class="card-headline">Foundation in Business & IT</h3>
+                        <p class="card-subtext">BCAS Campus, Colombo</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <p class="date-tag">2021 (2022)</p>
+                    <h3 class="card-headline">DS Senanayake College, Colombo</h3>
+                    <p class="card-subtext">Ordinary Level (GCE O/L)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS -->
+        <section id="s-3">
+            <div class="content">
+                <h2 class="section-title">TECHNICAL ARSENAL</h2>
+                <div class="split-layout">
+                    <div class="info-card">
+                        <h3 class="skill-category">Cloud & Infrastructure</h3>
+                        <div class="tag-group">
+                            <span class="tag">AWS EC2/S3/RDS</span>
+                            <span class="tag">VPC Networking</span>
+                            <span class="tag">CloudFormation</span>
+                            <span class="tag">IAM Security</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3 class="skill-category">Networking</h3>
+                        <div class="tag-group">
+                            <span class="tag">Enterprise Design</span>
+                            <span class="tag">Subnetting & VLANs</span>
+                            <span class="tag">Routing & NAT</span>
+                            <span class="tag">Cisco IOS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card" style="margin-top: 2rem;">
+                    <h3 class="skill-category">Development</h3>
+                    <div class="tag-group">
+                        <span class="tag">C# (OOP)</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">HTML5 / CSS3</span>
+                        <span class="tag">FinOps Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CONTACT -->
+        <section id="s-4">
+            <div class="content">
+                <div class="contact-header">
+                    <h2 class="section-title">CONTACT ME</h2>
+                    <p class="subtitle">Direct channels and secure message transmission.</p>
+                </div>
+
+                <div class="circular-contact-row">
+                    <!-- CHANGE: Use any image URL or local file path in the 'src' below -->
+                    <a href="tel:+94743446343" class="circular-btn" data-label="Phone">
+                        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Phone">
+                    </a>
+                    <a href="https://wa.me/94743446343" target="_blank" class="circular-btn" data-label="WhatsApp">
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+                    </a>
+                    <a href="mailto:saadrizan0521@gmail.com" class="circular-btn" data-label="Email">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email">
+                    </a>
+                    <a href="https://www.linkedin.com/in/mohamed-saad-rizan" target="_blank" class="circular-btn" data-label="LinkedIn">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+                    </a>
+                </div>
+
+                <div class="contact-mailbox">
+                    <!-- FUNCTIONAL FORM INTEGRATION -->
+                    <form action="https://formspree.io/f/myknbqjg" method="POST">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Name</label>
+                                <input type="text" name="name" placeholder="John Doe" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" name="email" placeholder="email@example.com" required>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 1.2rem;">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="+94 ...">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 1.5rem;">
+                            <label>Message</label>
+                            <textarea name="message" rows="3" placeholder="Enter inquiry..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i data-lucide="send"></i> SEND
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /**
+         * Navigation & Animation Logic
+         */
+        function initIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                setTimeout(initIcons, 50);
+            }
+        }
+
+        let currentSection = 0;
+        const totalSections = 5; 
+        let isScrolling = false;
+
+        const getElements = () => ({
+            wrapper: document.getElementById('wrapper'),
+            sections: document.querySelectorAll('section'),
+            links: document.querySelectorAll('.nav-link'),
+            overlay: document.querySelector('.project-page')
+        });
+
+        function moveTo(index) {
+            const { wrapper, sections, links } = getElements();
+            if (index < 0 || index >= totalSections || !wrapper) return;
+            
+            if (window.innerWidth <= 768) {
+                const headerOffset = 60; // corresponds to top-nav height in mobile
+                const elementPosition = sections[index].getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+                
+                links.forEach((link, i) => link.classList.toggle('active', i === index));
+                return;
+            }
+
+            currentSection = index;
+            wrapper.style.transform = `translateY(-${index * 100}vh)`;
+            
+            sections.forEach((s, i) => s.classList.toggle('active', i === index));
+            links.forEach((link, i) => link.classList.toggle('active', i === index));
+        }
+
+        const handlePageScroll = (direction) => {
+            if (window.innerWidth <= 768) return; // Disable scroll hijack on mobile
+            if (isScrolling) return;
+            const { overlay } = getElements();
+            if (overlay && overlay.classList.contains('active')) return;
+
+            if (direction === 'down' && currentSection < totalSections - 1) {
+                isScrolling = true;
+                moveTo(currentSection + 1);
+            } else if (direction === 'up' && currentSection > 0) {
+                isScrolling = true;
+                moveTo(currentSection - 1);
+            }
+
+            if (isScrolling) {
+                setTimeout(() => { isScrolling = false; }, 1000);
+            }
+        };
+
+        window.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) < 20) return;
+            handlePageScroll(e.deltaY > 0 ? 'down' : 'up');
+        }, { passive: true });
+
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+        window.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const diff = touchStartY - touchEndY;
+            if (Math.abs(diff) > 50) handlePageScroll(diff > 0 ? 'down' : 'up');
+        }, { passive: true });
+
+        const projectData = {
+            midwife: {
+                title: "Rakawaranaya: Maternal and Child Healthcare System",
+                img: "./rakawaranaya.png",
+                longDesc: `This project is a comprehensive digital solution designed for the Ministry of Health in Sri Lanka to modernize the workflow of community midwives. The system transitions a traditionally paper-heavy process into a streamlined, web-based platform, enabling healthcare workers to manage maternal and child health records with higher accuracy and efficiency. By centralizing data such as pregnancy registrations, clinic visits, and immunization schedules, the application reduces the administrative burden on midwives, allowing them to focus more on providing essential care to mothers and children in rural and urban communities.<br><br>
+                <strong>Mobile Application Features:</strong>
+                <ul>
+                    <li><strong>Offline Data Synchronization:</strong> Allows midwives to record health data in rural areas without internet access; data automatically syncs once a connection is re-established.</li>
+                    <li><strong>Digital Pregnancy Register (Garbani Naama Lekanaya):</strong> Replaces paper logs with digital profiles to track maternal health, BMI, and risk factors.</li>
+                    <li><strong>Child Growth & Immunization Tracking:</strong> A dedicated module for children under five to monitor weight, height, and vaccination schedules (BR Register).</li>
+                    <li><strong>Smart Visit Scheduler:</strong> An automated calendar that alerts the midwife of upcoming home visits and clinic dates to ensure 100% coverage.</li>
+                    <li><strong>In-App Notifications:</strong> Real-time alerts for urgent follow-ups or changes in clinic schedules directed by the MOH.</li>
+                    <li><strong>Privacy-First Health Records:</strong> Secure input fields for sensitive information (e.g., HIV status or family history) with role-based viewing permissions.</li>
+                </ul><br>
+                <strong>Web Platform Features:</strong>
+                <ul>
+                    <li><strong>Centralized Analytics Dashboard:</strong> Provides a high-level overview of community health trends, birth rates, and immunization coverage through visual charts.</li>
+                    <li><strong>Advanced Reporting Engine:</strong> Generates monthly and daily reports automatically, eliminating the need for manual tallying and paper submission.</li>
+                    <li><strong>User & Role Management:</strong> Secure administrative controls to manage access levels for different staff members across the Ministry.</li>
+                    <li><strong>Clinic Resource Management:</strong> Tools to coordinate supplies and scheduling for local clinics based on the volume of registered patients.</li>
+                    <li><strong>Data Validation & Verification:</strong> A supervisor portal where SPHM and AMOH officers can review and verify entries made by midwives for accuracy and compliance.</li>
+                    <li><strong>Inventory Tracking:</strong> Monitors the distribution of essential health supplements and vaccines to different regions.</li>
+                </ul>`,
+                tech: ["UML Modeling", "Full-stack Workflow", "Agile Scrum", "MoSCoW Prioritization", "Jira", "System Architecture", "API Contracts", "Quality Assurance", "Form Validation"]
+            },
+            smarthealth: {
+                title: "Enterprise Infrastructure Automation: Global Retail Migration",
+                img: "./smarthealth.png",
+                longDesc: `This project involved developing a comprehensive migration strategy and automation framework to transition a legacy on-premises retail infrastructure to a modern, automated AWS environment. The focus was on implementing the AWS Well-Architected Framework and using Infrastructure as Code (IaC) to ensure a resilient, secure, and cost-effective cloud presence.<br><br>
+                <strong>Key Features:</strong>
+                <ul>
+                    <li><strong>CloudFormation Infrastructure Automation:</strong> Developed reusable YAML templates to provision the entire VPC stack, including subnets, NAT gateways, and security groups, ensuring 100% environment consistency.</li>
+                    <li><strong>7Rs Migration Strategy:</strong> Applied specialized migration pathways (Rehost, Replatform, Refactor) to different business workloads based on performance and complexity requirements.</li>
+                    <li><strong>Well-Architected Compliance:</strong> Aligned the infrastructure with the five pillars: Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization.</li>
+                    <li><strong>Advanced Load Balancing:</strong> Implemented Application Load Balancers (ALB) to handle sophisticated routing and health checks across web and application tiers.</li>
+                    <li><strong>Multi-Layered Security:</strong> Established a rigorous security perimeter using fine-grained IAM policies, Network ACLs, and integrated encryption for data at rest and in transit.</li>
+                    <li><strong>Self-Healing Architecture:</strong> Integrated Auto-Scaling groups with CloudWatch alarms to automatically replace unhealthy instances and maintain system uptime.</li>
+                </ul><br>
+                <strong>Skills & Technologies Applied:</strong>
+                <ul>
+                    <li><strong>Automation:</strong> AWS CloudFormation (IaC), JSON/YAML Template Design.</li>
+                    <li><strong>Strategy:</strong> AWS Cloud Adoption Framework (CAF), 7Rs Migration Analysis.</li>
+                    <li><strong>Architecture:</strong> VPC Design, High Availability (Multi-AZ), Disaster Recovery Planning.</li>
+                    <li><strong>Security:</strong> IAM, Security Groups, NACLs, AWS Secrets Manager.</li>
+                    <li><strong>Optimization:</strong> TCO Analysis, AWS Pricing Calculator, Performance Bottleneck Identification.</li>
+                </ul>`,
+                tech: ["CloudFormation", "IaC", "7Rs Migration", "AWS CAF", "VPC Design", "Multi-AZ", "IAM Security", "TCO Analysis"]
+            },
+            greenfarm: {
+                title: "GreenFarm Organics Cloud Infrastructure",
+                img: "./greenfarm.png",
+                longDesc: `This project focuses on designing and implementing a highly available, scalable, and secure cloud infrastructure for GreenFarm Organics, an SME transitioning from an aging on-premise system to AWS. The primary goal was to resolve performance bottlenecks during peak order periods and establish a robust disaster recovery plan. By architecting a three-tier cloud environment, the solution ensures that the platform can handle increasing web traffic while maintaining data integrity and high service availability for global customers.<br><br>
+                <strong>Key Features:</strong>
+                <ul>
+                    <li><strong>Three-Tier High Availability Architecture:</strong> Decouples the presentation, application, and data layers across multiple Availability Zones to eliminate single points of failure.</li>
+                    <li><strong>Auto-Scaling & Load Balancing:</strong> Utilizes AWS Auto Scaling and Application Load Balancers (ALB) to automatically adjust compute capacity based on real-time traffic demand.</li>
+                    <li><strong>Managed Database with Multi-AZ:</strong> Implementation of Amazon RDS with Multi-Availability Zone deployment for automated failover and synchronous data replication.</li>
+                    <li><strong>Global Content Delivery:</strong> Integration of Amazon CloudFront (CDN) and S3 to cache static content globally, significantly reducing latency for international users.</li>
+                    <li><strong>Centralized Monitoring & Auditing:</strong> Real-time performance tracking and security logging using Amazon CloudWatch and AWS CloudTrail.</li>
+                    <li><strong>Automated Backup & Recovery:</strong> Point-in-time recovery and automated snapshotting to meet strict Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO).</li>
+                </ul><br>
+                <strong>Skills & Technologies Applied:</strong>
+                <ul>
+                    <li><strong>Cloud Architecture:</strong> Designing VPCs, Subnets (Public/Private), and Route Tables for secure network isolation.</li>
+                    <li><strong>AWS Core Services:</strong> Expert configuration of EC2, S3, RDS, CloudFront, and IAM.</li>
+                    <li><strong>Infrastructure Strategy:</strong> Experience in Cloud Migration Readiness (Requirement Analysis) and Cost Optimization.</li>
+                    <li><strong>Performance Engineering:</strong> Implementing Elastic Load Balancing (ELB) and Auto Scaling Groups (ASG).</li>
+                    <li><strong>Security & Compliance:</strong> Configuring Security Groups, Network ACLs, and AWS backup policies for disaster recovery.</li>
+                    <li><strong>Financial Analysis:</strong> Proficient in using the AWS Pricing Calculator for TCO (Total Cost of Ownership) and cost-benefit analysis.</li>
+                </ul>`,
+                tech: ["Cloud Architecture", "AWS Core Services", "Infrastructure Strategy", "Performance Engineering", "Security & Compliance", "Financial Analysis", "High Availability"]
+            },
+            network: {
+                title: "Network Infrastructure & Cyber Security: Multi-Location Enterprise Design",
+                img: "./Networkingh.png",
+                longDesc: `This project focused on designing and implementing a secure, high-performance network infrastructure for a corporate entity with multiple branch locations (Colombo, Galle, and Kandy). The goal was to establish seamless inter-branch connectivity while maintaining strict security protocols and optimized data flow.<br><br>
+                <strong>Key Features:</strong>
+                <ul>
+                    <li><strong>Hierarchical Network Design:</strong> Implementation of a scalable architecture using Cisco hardware to connect three geographically distinct branches.</li>
+                    <li><strong>VLAN Segmentation:</strong> Logical division of departments (Management, HR, IT, Finance, etc.) to enhance security and reduce broadcast traffic.</li>
+                    <li><strong>Dynamic Routing (RIPv2/OSPF):</strong> Configured robust routing protocols to ensure efficient data path selection and automatic failover between locations.</li>
+                    <li><strong>Custom IP Subnetting (VLSM):</strong> Designed a Variable Length Subnet Masking (VLSM) scheme to maximize IPv4 address efficiency across all departments.</li>
+                    <li><strong>Inter-VLAN Routing:</strong> Used "Router-on-a-Stick" configurations to allow secure, controlled communication between different functional units.</li>
+                    <li><strong>Network Security (ACLs):</strong> Implementation of Standard and Extended Access Control Lists to prevent unauthorized access to sensitive server rooms and administrative data.</li>
+                    <li><strong>Redundancy & Reliability:</strong> Integration of the Spanning Tree Protocol (STP) to prevent network loops while providing backup paths.</li>
+                </ul><br>
+                <strong>Skills & Technologies Applied:</strong>
+                <ul>
+                    <li><strong>Networking Tools:</strong> Cisco Packet Tracer, Wireshark, Live Map Integration.</li>
+                    <li><strong>Protocols & Services:</strong> TCP/IP, RIPv2, VLANs, DHCP, NAT, and STP.</li>
+                    <li><strong>Hardware Configuration:</strong> Layer 2/3 Switches, Routers, and Wireless Access Points (WAPs).</li>
+                    <li><strong>Cyber Security:</strong> Threat modeling (DoS, Man-in-the-Middle), Firewall configuration, and Access Control management.</li>
+                    <li><strong>Documentation:</strong> Technical IP addressing schemes and network topology mapping.</li>
+                </ul>`,
+                tech: ["Cisco Packet Tracer", "TCP/IP & RIPv2", "VLANs & STP", "Layer 2/3 Switching", "Cyber Security", "ACLs & NAT", "IP Subnetting"]
+            },
+            migration: {
+                title: "Hotel Reservation System",
+                img: "./Hotel.png",
+                longDesc: "A desktop-based management platform featuring guest check-ins, room availability tracking, and billing automation developed using Object Oriented Programming principles.",
+                tech: ["C#", "SQL Server", "OOP", "UI Design"]
+            },
+            serverless: {
+                title: "Hospital & Pharmacy Web",
+                img: "./hospital.png",
+                longDesc: "Web-based application designed to streamline appointment booking and pharmaceutical inventory management, improving patient accessibility and administrative efficiency.",
+                tech: ["HTML5", "CSS3", "JavaScript", "Database Management"]
+            },
+            iam: {
+                title: "Movie Ticket Booking",
+                img: "./cinema.png",
+                longDesc: "Comprehensive cinema booking portal featuring interactive seat selection, showtime scheduling, and secure user authentication flows.",
+                tech: ["Web Tech", "Seat Logic", "Auth Architecture", "Security"]
+            }
+        };
+
+        function openProject(id) {
+            const data = projectData[id];
+            const projectPage = document.getElementById('project-page');
+            const content = document.getElementById('project-page-content');
+            if (!data || !projectPage || !content) return;
+
+            content.innerHTML = `
+                <img src="${data.img}" class="project-detail-img">
+                <h1 class="project-detail-title">${data.title}</h1>
+                <div class="project-detail-desc">${data.longDesc}</div>
+                <br>
+                <h3 style="font-size: 1.2rem; color: #ffffff; margin-bottom: 1rem;">Core Skills Applied</h3>
+                <div class="tag-group" style="margin-bottom: 2rem;">${data.tech.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            `;
+            
+            projectPage.style.display = 'block';
+            setTimeout(() => projectPage.classList.add('active'), 10);
+            initIcons(); 
+        }
+
+        function closeProjectPage() {
+            const projectPage = document.getElementById('project-page');
+            if (projectPage) {
+                projectPage.classList.remove('active');
+                setTimeout(() => { projectPage.style.display = 'none'; }, 500);
+            }
+        }
+
+        // Standard init on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initIcons();
+            
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            
+            if (window.innerWidth > 768) {
+                // Force native scroll back to top on desktop immediately to prevent "dark screen" empty space ghosting
+                window.scrollTo(0, 0);
+                moveTo(0);
+            }
+
+            // Mobile Intersection Observer for active nav links
+            const observer = new IntersectionObserver((entries) => {
+                if (window.innerWidth > 768) return;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const { sections, links } = getElements();
+                        const index = Array.from(sections).indexOf(entry.target);
+                        if (index !== -1) {
+                            links.forEach((link, i) => link.classList.toggle('active', i === index));
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            getElements().sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
